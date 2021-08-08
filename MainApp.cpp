@@ -79,7 +79,6 @@ public:
 		}
 		cout << ")" << endl;
 	}
-
 };
 
 class Cluster
@@ -153,13 +152,13 @@ class KMeans
 {
 private:
 	int m_NumOfClu;//Numbers of clusters
-	int m_TotalValues, m_TotalPoints, max_iterations;
+	int m_TotalValues, m_TotalPoints, m_MaxIterations;
 	function<void(vector<Point>&, int, vector<Point>&)> m_InitCentralPointFunc;
 	function<double(Point vPointa, Point vPointb)> m_CalDisBetPointsFunc;
 	function<Point(vector<Point>)> m_CalCentralPointFunc;
 	vector<Cluster> m_Clusters;
 	//return ID of nearest center
-	int getIDNearestCenter(Point vPoint) {
+	int getIDNearestCenter(Point& vPoint) {
 		double sum = 0.0, min_dist = INF;
 		int id_cluster_center = 0;
 		for (int i = 0; i < m_NumOfClu; i++) {
@@ -183,13 +182,13 @@ public:
 		this->m_NumOfClu = vNumOfClu;
 		this->m_TotalPoints = vTotalPoints;
 		this->m_TotalValues = vTotalValues;
-		this->max_iterations = vMaxIterations;
+		this->m_MaxIterations = vMaxIterations;
 		this->m_InitCentralPointFunc = vInitCentralPointFunc;
 		this->m_CalDisBetPointsFunc = vCalDisBetPointsFunc;
 		this->m_CalCentralPointFunc = vCalCentralPointFunc;
 	}
 
-	void showClusters()
+	void showResult()
 	{
 		cout << endl;
 		cout << "Result :" << endl;
@@ -205,34 +204,41 @@ public:
 		vector<Point> CentralPoints;
 		if (m_NumOfClu > m_TotalPoints)
 			return;
+
 		// choose numOfClu centers of the clusters
 		m_InitCentralPointFunc(vPoints, m_NumOfClu, CentralPoints);
+
 		//Set initial clusters and its centralPoints
 		for (int i = 0; i < CentralPoints.size(); i++)
 		{
 			Cluster TempCluster(i, CentralPoints[i]);
 			m_Clusters.push_back(TempCluster);
 		}
+
 		//Debug: Print points and cluster
-		for (int i = 0; i < vPoints.size(); i++)
-			vPoints[i].printPoint();
-		for (int i = 0; i < m_Clusters.size(); i++)
-			m_Clusters[i].printCluster();
-		int iter = 1; //Number of iterations
+		//for (int i = 0; i < vPoints.size(); i++)
+		//	vPoints[i].printPoint();
+		//for (int i = 0; i < m_Clusters.size(); i++)
+		//	m_Clusters[i].printCluster();
+
+		int Iter = 1; //Number of iterations
+
 		while (true) {
 			bool done = true;
 			//associate each point to the nearest center
 			for (int i = 0; i < m_TotalPoints; i++) {
-				int id_old_cluster = vPoints[i].getCluster();
-				int id_nearest_center = getIDNearestCenter(vPoints[i]);
-				if (id_old_cluster != id_nearest_center) {
-					if (id_old_cluster != -1)
-						m_Clusters[id_old_cluster].removePoint(vPoints[i].getID());
-					vPoints[i].setCluster(id_nearest_center);
-					m_Clusters[id_nearest_center].addPoint(vPoints[i]);
+				int IdOldCluster = vPoints[i].getCluster();
+				int IdNearestCluster = getIDNearestCenter(vPoints[i]);
+				if (IdOldCluster != IdNearestCluster) {
+					if (IdOldCluster != -1)
+						m_Clusters[IdOldCluster].removePoint(vPoints[i].getID());
+					vPoints[i].setCluster(IdNearestCluster);
+					m_Clusters[IdNearestCluster].addPoint(vPoints[i]);
 					done = false;
 				}
 			}
+
+
 			for (int i = 0; i < m_NumOfClu; i++)
 			{
 				Point PointTemp(m_TotalValues);
@@ -240,12 +246,13 @@ public:
 				m_Clusters[i].setCentralPoint(PointTemp);
 			}
 
-			if (done == true || iter >= max_iterations)
+			if (done == true || Iter >= m_MaxIterations)
 				break;
-			iter++;
+			Iter++;
 		}
+
 		//show elements of clusters
-		showClusters();
+		showResult();
 	}
 };
 
