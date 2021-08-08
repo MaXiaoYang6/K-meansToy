@@ -238,7 +238,6 @@ public:
 				}
 			}
 
-
 			for (int i = 0; i < m_NumOfClu; i++)
 			{
 				Point PointTemp(m_TotalValues);
@@ -312,17 +311,19 @@ Point calEuclideanCentralPoint(vector<Point> points)
 
 int main()
 {
-	srand(time(NULL));
-
-	int total_points = 3, total_values = 2, numOfCul = 2, max_iterations = 100;
-
-	//cin >> total_points >> total_values >> numOfCul >> max_iterations;
-
-	vector<Point> points;
 	
-	for (int i = 0; i < total_points; i++) {
+
+	int TotalPoints, TotalValues, NumOfCul, MaxIterations;
+	vector<Point> points;
+
+	cout << "Please input the TotalPoints TotalValues NumOfCul MaxIterations" << endl;
+	cout << "and then input ToalPoints Point each of whihc has TotalValues values: " << endl;
+	cin >> TotalPoints >> TotalValues >> NumOfCul >> MaxIterations;
+
+	srand(time(NULL));
+	for (int i = 0; i < TotalPoints; i++) {
 		vector<double> values;
-		for (int k = 0; k < total_values; k++) {
+		for (int k = 0; k < TotalValues; k++) {
 			double value;
 			cin >> value;
 			values.push_back(value);
@@ -330,7 +331,8 @@ int main()
 		Point p(i, values);
 		points.push_back(p);
 	}
-	KMeans kmeans(numOfCul, total_points, total_values, max_iterations);
+
+	KMeans kmeans(NumOfCul, TotalPoints, TotalValues, MaxIterations, initRandomCentralPoint, calEuclideanDis, calEuclideanCentralPoint);
 	kmeans.run(points);
 	return 0;
 }
