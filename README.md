@@ -59,4 +59,10 @@ Ok，Boys! I think output is easy to understand.
 
 The program Output 3 cluster and its ID and its points member which also contains id and values. And it also output Central point of each cluster.
 
+### Modify the distance function, initCentralPoint func
 
+You can also add your own  distance initcentralPoint func and so on via function interface.
+
+Good Luck!
+
+# 👋
