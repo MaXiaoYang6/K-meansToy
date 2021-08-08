@@ -1,8 +1,10 @@
 # K-meansToy
 
-K-means 1.0...
+K-means 1.0
 
-There are many bugs now...
+There are many bugs now(Maybe)
+
+Welcome to submit pull requestion and push.
 
 ## Tutorial
 
