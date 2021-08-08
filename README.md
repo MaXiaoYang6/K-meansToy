@@ -6,6 +6,8 @@ There are many bugs now(Maybe)
 
 Welcome to submit pull requestion and push.
 
+# 😁
+
 ## Tutorial
 
 Hey Guys! Next I will teach you how to use my K-meansToy!
